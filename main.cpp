@@ -1,100 +1,96 @@
-#include <iostream>
-#include <vector>
-#include <string>
-#include <algorithm>
-#include <ctime>
-#include <map>
+#include <iostream> // ievades/izvades funkcijaam (cout, cin)
+#include <vector> // ieklauj vektorus
+#include <string> // ieklauj string
+#include <algorithm> // ieklauj, piemeram, burtu sakartosanu pec visbiezak izmantotaa
+#include <map> // ieklauj, piemeram, funkciju, kas saskaita katra burta biezhumu tekstaa
 
-using namespace std;
+using namespace std; // lai nav katru reizi jaraksta std:: pirms funkcijam
 
+//funkcija, kas skaita patskanus, lidzskanus un atstarpes dotajaa teikumaa
+void skaititlidzskanusunpatskanus(const string& teikums, int& patskani, int& lidzskani, int& atstarpes) {
+//sakumaa visus 3 iestata uz 0
+    patskani = 0;
+    lidzskani = 0;
+    atstarpes = 0;
+
+    for (char burts : teikums) { // parbauda, vai ievaditais ir burts, tad darbojas talak
+        if (isalpha(burts)) { // parbauda, vai ievaditais ir burts (nav cipars/cits simbols)
+            // parbauda, vai tas ir patskanis
+            if (burts == 'a' || burts == 'e' || burts == 'i' || burts == 'o' || burts == 'u' ||
+                burts == 'A' || burts == 'E' || burts == 'I' || burts == 'O' || burts == 'U') {
+                ++patskani; // ja ir, tad palielina patskanu skaitu par vienu
+            } else {
+                ++lidzskani; // ja nav, tad palielina lidzskanu skaitu par vienu
+            }
+        } else if (burts == ' ') {
+// ja simbols ir atstarpe, palielina atstarpju skaitu par vienu
+            ++atstarpes; // pieskaita vienu atstarpi
+        }
+    }
+}
+
+
+// spele, kur jasakarto burti pareiza seciba
 void sajauktievardi() {
-    const int a = 10;
+    const int a = 10; // vardu skaits
     string vards[a] = {
-        "banquet",
-        "whistle",
-        "journey",
-        "fragile",
-        "velvet",
-        "harvest",
-        "adventure",
-        "glimpse",
-        "satisfaction",
-        "sincere"
+        "banquet", "whistle", "journey", "fragile", "velvet", "harvest", "adventure", "glimpse", "satisfaction", "sincere"
     };
 
-    string nvards[a] = {
-        "baqtune",
-        "whleist",
-        "eynjrou",
-        "glfraei",
-        "tvveel",
-        "tsrahve",
-        "advurtnee",
-        "pscmilge",
-        "saftcinatiso",
-        "eernisc"
+    string sajauktaisvards[a] = {
+        "baqtune", "whleist", "eynjrou", "glfraei", "tvveel", "tsrahve", "advurtnee", "pscmilge", "saftcinatiso", "eernisc"
     };
 
-    string j;
-    int score = 0;
+    string j; // mainiigais, lai lietotajs varetu ievadit savu atbildi
+    int score = 0; // rezultats sakumaa ir 0
 
     cout << "Sakaarto burtus pareizaa seciibaa!" << endl;
 
-    for(int i = 0; i < a; i++)
-    {
-        cout << "\nSajauktais vards: " << nvards[i] << endl;
+    for(int i = 0; i < a; i++) {
+        cout << "\nSajauktais vards: " << sajauktaisvards[i] << endl; // paradas sajauktais vards
         cin >> j;
-        if(j == vards[i])
-        {
-            cout << "Apsveicu!" << endl;
+        if(j == vards[i]) { // salidzina atbildi ar pareizo vardu
+            cout << "Apsveicu!" << endl; // ja ir pareizi
             score++;
-        }
-        else
-        {
-            cout << "Nepareizi. Pareizaa atbilde: " << vards[i] << endl;
+        } else {
+            cout << "Nepareizi. Pareizaa atbilde: " << vards[i] << endl; //ja nav
         }
     }
 
     cout << "\nTavs rezultaats: " << score << " no " << a << " pareiziem." << endl;
 }
 
-// spele ar patskanu un lidzskanu minesanu
+// spele – saskaiti sava teikuma patskanus un lidzskanus
 void pirmaaspele() {
-    string teikums;
+    string teikums; //mainigais, kas bus lietotaja ievaditais teikums
     cout << "Spele: straadaa ar savu teikumu" << endl;
     cout << "Ievadi garu teikumu: ";
-    getline(cin, teikums);
+    getline(cin, teikums); // iegust teikumu
 
-    int patskani = 0, lidzskani = 0;
+    int patskani = 0, lidzskani = 0, atstarpes = 0; //sakuma to skaits ir 0
 
-    for (char burts : teikums) {
-        if (isalpha(burts)) {
-            if (burts == 'a' || burts == 'e' || burts == 'i' || burts == 'o' || burts == 'u' ||
-                burts == 'A' || burts == 'E' || burts == 'I' || burts == 'O' || burts == 'U') {
-                ++patskani;
-            } else {
-                ++lidzskani;
-            }
-        }
-    }
-
-    int minetiepatskani, minetielidzskani;
-    cout << "Uzmini, cik patskanu ir teikumaa: ";
+    skaititlidzskanusunpatskanus(teikums, patskani, lidzskani, atstarpes);  // izsauc funkciju, kas tos saskaita
+    int minetiepatskani, minetielidzskani; // mainigie, kuros lietotajs ievadis savu atbildi
+    cout << "Nosaki, cik patskanu ir teikumaa: ";
     cin >> minetiepatskani;
-    cout << "Uzmini, cik lidzskanu ir teikumaa: ";
-    cin >> minetielidzskani;
-    cin.ignore();
 
-    if (minetiepatskani == patskani && minetielidzskani == lidzskani)
-        cout << "Mineejums ir pareizs!" << endl;
+    cout << "Nosaki, cik lidzskanu ir teikumaa: ";
+    cin >> minetielidzskani;
+
+    if (minetiepatskani == patskani && minetielidzskani == lidzskani) //salidzina
+        cout << "Pareizi!" << endl; // ja abas atbildes ir pareizas
     else {
-        cout << "Nepareizi." << endl;
+        cout << "Nepareizi." << endl; // ja nav
         cout << "Pareizi: " << patskani << " patskani un " << lidzskani << " lidzskani." << endl;
     }
 }
 
+
+// paskaidrojums par katru valodas kludu
 void skaidrojums(int indekss) {
     vector<string> paskaidrojumi = {
+        // paskaidrojumi par katru kludu
+
         "*would* nevar izmantot *if* dalaa",
         "*which* nevar izmantot, kad runa par cilvekiem – jalieto *who*",
         "ar vardu *married* jaizmanto *to*, nevis *with*",
@@ -118,9 +114,8 @@ void skaidrojums(int indekss) {
     };
     cout << "Paskaidrojums: " << paskaidrojumi[indekss] << endl;
 }
-
 void kludas() {
-    vector<string> kludaini = {
+    vector<string> kludaini = { // teikumi ar kludam
         "If I would have known, I would have helped.",
         "The man which helped you is my brother.",
         "She is married with a lawyer.",
@@ -142,7 +137,7 @@ void kludas() {
         "He seems to like this enviroment.",
         "She has many acquaintences."
     };
-
+// pareizie teikumi
     vector<string> pareizie = {
         "If I had known, I would have helped.",
         "The man who helped you is my brother.",
@@ -166,90 +161,85 @@ void kludas() {
         "She has many acquaintances."
     };
 
-    int score = 0;
+    int score = 0; // mainigais, kas skaita pareizo atbilzu skaitu
 
     for (int i = 0; i < kludaini.size(); ++i) {
-        string atbilde;
+        string atbilde; // mainigais, kuraa lietotajs ievadis atbildi
         cout << "\nAtrodi kludu saja teikumaa (ievadi laboto versiju):\n";
         cout << "-> Teikums: " << kludaini[i] << endl;
         cout << "Izlabotais teikums: ";
-        getline(cin, atbilde);
-        if (atbilde == pareizie[i]) {
-            cout << "Pareizi!\n";
+        getline(cin, atbilde); // iegust lietotaja labojumu
+
+        if (atbilde == pareizie[i]) { //salidzina lietotaja atbildi ar pareizo
+            cout << "Pareizi!\n"; //ja atbilde ir pareiza
             ++score;
         } else {
             cout << "Nepareizi – pareizais teikums ir:\n";
-            cout << "\"" << pareizie[i] << "\"\n";
-            skaidrojums(i);
+            cout << "\"" << pareizie[i] << "\"\n"; // parada pareizo teikumu
+            skaidrojums(i); // izsauc, lai izskaidrotu kludu nepareizajaa
         }
     }
 
     cout << "\nTu pareizi atbildeji uz " << score << " no " << kludaini.size() << " jautajumiem.\n";
 }
-
+// galvena funkcija, kas izsauc visas speles
 int main() {
-    vector<int> patskanuskaits;
-    vector<int> lidzskanuskaits;
-    vector<int> kopaburti;
-
-    string teikums;
+    string teikums; // mainigais, kura lietotajs ievadis tekstu
     cout << "Ievads: ievadi garaku tekstu, kam velies noteikt patskanu, lidzskanu skaitu u.c.: ";
-    getline(cin, teikums);
+    getline(cin, teikums); // iegust ievadito teksts
 
+//mainigie, kas saskaitis visus tris
     int patskani = 0, lidzskani = 0, atstarpes = 0;
 
-    for (int i = 0; i < teikums.length(); ++i) {
-        char burts = teikums[i];
-        if (burts == 'a' || burts == 'e' || burts == 'i' || burts == 'o' || burts == 'u' ||
-            burts == 'A' || burts == 'E' || burts == 'I' || burts == 'O' || burts == 'U') {
-            ++patskani;
-        } else if (isalpha(burts)) {
-            ++lidzskani;
-        } else if (burts == ' ') {
-            ++atstarpes;
-        }
-    }
+// izsauc funkciju, kas skaita visus 3
+    skaititlidzskanusunpatskanus (teikums, patskani, lidzskani, atstarpes);
 
-    patskanuskaits.push_back(patskani);
-    lidzskanuskaits.push_back(lidzskani);
-    kopaburti.push_back(patskani + lidzskani);
-
+// izprinte rezultatu
     cout << "Patskani: " << patskani << endl;
     cout << "Lidzskani: " << lidzskani << endl;
     cout << "Burti kopaa: " << (patskani + lidzskani) << endl;
     cout << "Atstarpes: " << atstarpes << endl;
 
-    map<char, int> burtiCount;
-    for (char c : teikums) {
-        if (isalpha(c)) {
-            burtiCount[tolower(c)]++;
+    // visbiezaka burta noteiksana
+
+    map<char, int> burtiCount; //saglabas katra burta biezhumu
+    for (char c : teikums) { //iziet cauri katrai zimei teikumaa
+        if (isalpha(c)) { //ja zime ir burts
+            burtiCount[tolower(c)]++; // palielina konkretaa burta biezhumu
         }
     }
 
+// mainigie visbiezhakaa burta noskaidrosanai
     char visbiezakaisburts;
-int burtuskaits = 0;
-for (auto& b : burtiCount) {
-    if (b.second > burtuskaits) {
-        burtuskaits = b.second;
-        visbiezakaisburts = b.first;
+    int burtuskaits = 0;
+
+//atrod visbiezhako burtu
+    for (auto& b : burtiCount) {
+        if (b.second > burtuskaits) { // ja sis burts tiek lietots vairak, neka ieprieksejais
+            burtuskaits = b.second;
+            visbiezakaisburts = b.first; // saglabaa so burtu
+        }
     }
-}
-cout << "Visbiezak lietotais burts: '" << visbiezakaisburts << "' - " << burtuskaits << " reizes.\n";
 
+    cout << "Visbiezak lietotais burts: '" << visbiezakaisburts << "' - " << burtuskaits << " reizes.\n";
 
+    // burtu sakartosana pec lietojuma biezhuma
     vector<pair<char, int>> sakartotiBurti(burtiCount.begin(), burtiCount.end());
     sort(sakartotiBurti.begin(), sakartotiBurti.end(), [](const pair<char, int>& a, const pair<char, int>& b) {
-        return b.second < a.second ? false : (b.second == a.second ? a.first < b.first : true);
+// karto pec biezhuma – no visbiezakaa lîdz visretakajam
+// ja biezhums ir vienads, karto alfabeta secibaa
+        return a.second == b.second ? a.first < b.first : a.second > b.second;
     });
 
-    cout << "\nBurtu lietojuma statistika (no visbiezak lidz visretak):\n";
+    cout << "Burtu lietojuma biezums (no visbiezaak lidz visretaak lietotajam):" << endl;
     for (const auto& par : sakartotiBurti) {
         cout << "'" << par.first << "' - " << par.second << " reizes\n";
     }
+//izsauc speles funkcijas
+    pirmaaspele(); // izsauc teikuma speeli
+    kludas(); // izsauc kludu labosanas speeli
+    sajauktievardi(); // izsauc sajaukto vardu speeli
 
-    pirmaaspele();
-    kludas();
-    sajauktievardi();
-
-    return 0;
+    return 0; //beidz programmu
 }
+
